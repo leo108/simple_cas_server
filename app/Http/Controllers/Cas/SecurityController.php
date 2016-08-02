@@ -26,7 +26,6 @@ class SecurityController extends Controller
 
     public function loginPageAction(Request $request)
     {
-        $gateway = $request->get('gateway', '');
         $service = $request->get('service', '');
         $errors  = [];
         if (!empty($service)) {
@@ -45,18 +44,18 @@ class SecurityController extends Controller
                 unset($query['warn']);
                 $url = route('cas_login_action', $query);
 
-                return view('auth.login_warn', ['url' => $url]);
+                return view('auth.login_warn', ['url' => $url, 'service' => $service]);
             }
 
             return $this->authenticated($request, $user);
         }
 
-        //user not login but set gateway, redirect to $service directly
-        if (!$user && $gateway === 'true' && !empty($service)) {
-            return redirect($service);
+        $view = view('auth.login', ['origin_req' => $request->query->all()]);
+        if (!empty($errors)) {
+            $view->withErrors(['global' => $errors]);
         }
 
-        return view('auth.login', ['origin_req' => $request->query->all()])->withErrors(['global' => $errors]);
+        return $view;
     }
 
     protected function authenticated(Request $request, User $user)

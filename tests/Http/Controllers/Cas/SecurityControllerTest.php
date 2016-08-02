@@ -7,11 +7,61 @@
  * Time: 11:06
  */
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use App\Exceptions\CAS\CasException;
 
 class SecurityControllerTest extends TestCase
 {
     use DatabaseMigrations;
+
+    public function testInvalidLogin()
+    {
+        //login with none exists user
+        $this->_login('not_exists_user', 'random')->see(trans('auth.failed'));
+
+        //login with invalid credential
+        $user = $this->initDemoUser();
+        $this->_login($user->name, 'wrong_password')->see(trans('auth.failed'));
+    }
+
+    public function testBaseLoginLogout()
+    {
+        //normally login
+        $user = $this->initDemoUser();
+        $this->_login($user->name, 'secret')->see($user->name);
+
+        //test session cookie
+        $cookies = $this->response->headers->getCookies(ResponseHeaderBag::COOKIES_ARRAY);
+        $this->assertContains($user->name, $this->route('GET', 'home', [], [], $cookies)->getContent());
+        //logout
+        $this->assertNotContains($user->name, $this->route('GET', 'cas_logout', [], [], $cookies)->getContent());
+    }
+
+    public function testLoginWithRemember()
+    {
+        $user = $this->initDemoUser();
+        $this->_login($user->name, 'secret', true)->see($user->name);
+
+        $cookies = $this->response->headers->getCookies(ResponseHeaderBag::COOKIES_ARRAY);
+        unset($cookies['laravel_session']);
+        $this->assertContains($user->name, $this->route('GET', 'home', [], [], $cookies)->getContent());
+    }
+
+    public function testLoginWithService()
+    {
+        $user       = $this->initDemoUser();
+        $service    = $this->initService();
+        $serviceUrl = 'http://'.$service->hosts()->first()->host;
+
+        $url = $this->app['url']->route('cas_login_page', ['service' => $serviceUrl]);
+        $this->visit($url)->dontSee((new CasException(CasException::INVALID_SERVICE))->getCasMsg());
+
+        $this->actingAs($user)->route('GET', 'cas_login_page', ['service' => $serviceUrl]);
+
+        $location = $this->response->headers->get('location');
+        $this->assertContains($serviceUrl, $location);
+        $this->assertContains('ticket=', $location);
+    }
 
     public function testRequestLoginWithInvalidServiceUrl()
     {
@@ -23,61 +73,36 @@ class SecurityControllerTest extends TestCase
             ->see((new CasException(CasException::INVALID_SERVICE))->getCasMsg());
     }
 
-//
-//    public function testInvalidLogin()
-//    {
-//        //login with none exists user
-//        $client = $this->_login(self::getNoneExistsUser(), 'random');
-//        $this->assertTrue(
-//            $client->getResponse()->isRedirect(
-//                $this->getRouter($client)->generate('cas_login', array(), Router::ABSOLUTE_URL)
-//            )
-//        );
-//        $crawler = $client->followRedirect();
-//        $this->assertContains(
-//            $this->getTrans($client)->trans('security.login.invalid_credential'),
-//            $crawler->filter('.panel-heading .alert')->text()
-//        );
-//
-//        //login with invalid credential
-//        $client = $this->_login(self::getDemoUser(), 'wrong_password');
-//        $this->assertTrue(
-//            $client->getResponse()->isRedirect(
-//                $this->getRouter($client)->generate('cas_login', array(), Router::ABSOLUTE_URL)
-//            )
-//        );
-//        $crawler = $client->followRedirect();
-//        $this->assertContains(
-//            $this->getTrans($client)->trans('security.login.invalid_credential'),
-//            $crawler->filter('.panel-heading .alert')->text()
-//        );
-//    }
+    public function testLoginWithWarn()
+    {
+        $user       = $this->initDemoUser();
+        $service    = $this->initService();
+        $serviceUrl = 'http://'.$service->hosts()->first()->host;
 
-//    /**
-//     * @param User   $user
-//     * @param string $password
-//     * @param bool   $remember
-//     * @param array  $params
-//     * @return Client
-//     */
-//    protected function _login(User $user, $password, $remember = false, $params = array())
-//    {
-//
-//
-//        $client  = static::createClient();
-//        $crawler = $client->request('GET', $this->getRouter($client)->generate('cas_login', $params));
-//        $this->assertContains('Central Authentication Service', $crawler->filter('.panel-title')->text());
-//        $form = $crawler->filter('form')->form(
-//            [
-//                'username' => $user->getUsername(),
-//                'password' => $password,
-//            ]
-//        );
-//        if ($remember) {
-//            $form['rememberMe']->tick();
-//        }
-//        $client->submit($form);
-//
-//        return $client;
-//    }
+        $url = $this->app['url']->route('cas_login_page', ['service' => $serviceUrl, 'warn' => 'true']);
+        $this->actingAs($user)->visit($url)->see(trans('message.cas_redirect_warn', ['url' => $serviceUrl]));
+        $jumpUrl = $this->filterByNameOrId('btn_ok', 'a')->link()->getUri();
+        $this->call('GET', $jumpUrl);
+        $location = $this->response->headers->get('location');
+        $this->assertContains($serviceUrl, $location);
+        $this->assertContains('ticket=', $location);
+    }
+
+    /**
+     * @param string $name
+     * @param string $password
+     * @param bool   $remember
+     * @param array  $params
+     * @return static
+     */
+    protected function _login($name, $password, $remember = false, $params = array())
+    {
+        $url  = $this->app['url']->route('cas_login_page', $params);
+        $form = $this->visit($url)->type($name, 'name')->type($password, 'password');
+        if ($remember) {
+            $form->check('remember');
+        }
+
+        return $form->press(trans('common.submit'));
+    }
 }

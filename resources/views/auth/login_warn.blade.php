@@ -10,7 +10,7 @@
                     </div>
                     <div class="panel-body">
                         <div class="alert alert-warning">
-                            Redirect To {{ $url }}
+                            @lang('message.cas_redirect_warn', ['url' => $service])
                         </div>
                         <div>
                             <button class="btn btn-danger pull-left" id="btn_abort">@lang('common.abort')</button>
