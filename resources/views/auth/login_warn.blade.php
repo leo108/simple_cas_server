@@ -13,8 +13,8 @@
                             Redirect To {{ $url }}
                         </div>
                         <div>
-                            <button class="btn btn-danger pull-left" id="btn_abort">Abort</button>
-                            <a class="btn btn-primary pull-right" id="btn_ok" href="{{ $url }}">OK</a>
+                            <button class="btn btn-danger pull-left" id="btn_abort">@lang('common.abort')</button>
+                            <a class="btn btn-primary pull-right" id="btn_ok" href="{{ $url }}">@lang('common.ok')</a>
                         </div>
                     </div>
                 </div>

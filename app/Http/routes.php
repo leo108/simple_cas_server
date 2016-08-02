@@ -21,10 +21,10 @@ Route::group(
     function () {
         Route::get('login', ['as' => 'cas_login_page', 'uses' => 'SecurityController@loginPageAction']);
         Route::post('login', ['as' => 'cas_login_action', 'uses' => 'SecurityController@login']);
-        Route::get('logout', 'SecurityController@logoutAction');
-        Route::any('validate', 'ValidateController@v1ValidateAction');
-        Route::any('serviceValidate', 'ValidateController@v2ValidateAction');
-        Route::any('p3/serviceValidate', 'ValidateController@v3ValidateAction');
+        Route::get('logout', ['as' => 'cas_logout', 'uses' => 'SecurityController@logout'])->middleware('auth');
+        Route::any('validate', ['as' => 'cas_v1validate', 'uses' => 'ValidateController@v1ValidateAction']);
+        Route::any('serviceValidate', ['as' => 'cas_v2validate', 'uses' => 'ValidateController@v2ValidateAction']);
+        Route::any('p3/serviceValidate', ['as' => 'cas_v3validate', 'uses' => 'ValidateController@v3ValidateAction']);
     }
 );
 

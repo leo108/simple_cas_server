@@ -8,6 +8,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\CAS\CasException;
 use App\Models\Ticket as Model;
 use App\User as UserModel;
 use Carbon\Carbon;
@@ -17,19 +18,18 @@ class Ticket
     /**
      * @param UserModel $user
      * @param string    $serviceUrl
+     * @throws CasException
      * @return \App\Models\Ticket
      */
     public static function applyTicket(UserModel $user, $serviceUrl)
     {
         $service = Service::getServiceByUrl($serviceUrl);
         if (!$service) {
-            //todo change exception class
-            throw new \RuntimeException('cas.invalid_service');
+            throw new CasException(CasException::INVALID_SERVICE);
         }
-        $ticket = self::getAvailableTicket(32);
+        $ticket = self::getAvailableTicket(config('cas.ticket_len', 32));
         if (!$ticket) {
-            //todo change exception class
-            throw new \RuntimeException('apply ticket failed');
+            throw new CasException(CasException::INTERNAL_ERROR, 'apply ticket failed');
         }
         $record = Model::create(
             [

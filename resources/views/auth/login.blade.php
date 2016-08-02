@@ -16,7 +16,7 @@
                             {{ csrf_field() }}
                             <fieldset>
                                 <div class="form-group{{ $errors->has('name') ? ' has-error' : '' }}">
-                                    <input class="form-control" placeholder="User Name" id="name" name="name" value="{{ old('name') }}" type="text" autofocus>
+                                    <input class="form-control" placeholder="@lang('auth.username')" id="name" name="name" value="{{ old('name') }}" type="text" autofocus>
                                     @if ($errors->has('name'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('name') }}</strong>
@@ -24,7 +24,7 @@
                                     @endif
                                 </div>
                                 <div class="form-group{{ $errors->has('password') ? ' has-error' : '' }}">
-                                    <input class="form-control" placeholder="Password" id="password" name="password" type="password">
+                                    <input class="form-control" placeholder="@lang('auth.password')" id="password" name="password" type="password">
                                     @if ($errors->has('password'))
                                         <span class="help-block">
                                         <strong>{{ $errors->first('password') }}</strong>
@@ -33,11 +33,11 @@
                                 </div>
                                 <div class="checkbox">
                                     <label>
-                                        <input name="remember" type="checkbox" value="1">Remember Me
+                                        <input name="remember" type="checkbox" value="1">@lang('auth.remember_me')
                                     </label>
                                 </div>
                                 <!-- Change this to a button or input when using this as a form -->
-                                <button type="submit" class="btn btn-lg btn-success btn-block">Submit</button>
+                                <button type="submit" class="btn btn-lg btn-success btn-block">@lang('common.submit')</button>
                             </fieldset>
                         </form>
                     </div>

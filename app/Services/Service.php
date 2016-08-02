@@ -38,6 +38,11 @@ class Service
         return self::getServiceByUrl($url) !== null;
     }
 
+    /**
+     * @param $name
+     * @param $hostArr
+     * @return \App\Models\Service
+     */
     public static function create($name, $hostArr)
     {
         if (Model::where('name', $name)->count() > 0) {

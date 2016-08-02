@@ -15,10 +15,10 @@ return [
 
     'failed'       => 'These credentials do not match our records.',
     'throttle'     => 'Too many login attempts. Please try again in :seconds seconds.',
-    'username'     => 'User Name',
-    'password'     => 'Password',
-    'remember_me'  => 'Remember Me',
-    'logout'       => 'Logout',
-    'logged_in_as' => 'You are logged in as :name',
-    'change_pwd'   => 'Change Password',
+    'username'     => '用户名',
+    'password'     => '密码',
+    'remember_me'  => '保持登录',
+    'logout'       => '注销',
+    'logged_in_as' => '你已登录为 :name',
+    'change_pwd'   => '修改密码',
 ];

@@ -13,7 +13,6 @@ use App\Http\Controllers\Controller;
 use App\Services\Ticket;
 use App\Exceptions\CAS\CasException;
 use App\Models\Ticket as TicketModel;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -101,18 +100,16 @@ class ValidateController extends Controller
             'realName' => $record->user->real_name,
         ] : [];
 
-        return $this->successResponse($record->user->name, '', $attr, [], $format);
+        return $this->successResponse($record->user->name, $attr, $format);
     }
 
     /**
      * @param $username
-     * @param $pgt
      * @param $attrs
-     * @param $proxies
      * @param $format
-     * @return Response|JsonResponse
+     * @return Response
      */
-    protected function successResponse($username, $pgt, $attrs, $proxies, $format)
+    protected function successResponse($username, $attrs, $format)
     {
         if (strtoupper($format) === 'JSON') {
             $data = [
@@ -123,38 +120,20 @@ class ValidateController extends Controller
                 ],
             ];
 
-            if (!empty($pgt)) {
-                $data['serviceResponse']['authenticationSuccess']['proxyGrantingTicket'] = $pgt;
-            }
-
             if (!empty($attrs)) {
                 $data['serviceResponse']['authenticationSuccess']['attributes'] = $attrs;
             }
 
-            if (!empty($proxies)) {
-                $data['serviceResponse']['authenticationSuccess']['proxies'] = $proxies;
-            }
-
-            return new JsonResponse($data);
+            return new Response($data);
         } else {
             $xml          = simplexml_load_string(self::BASE_XML);
             $childSuccess = $xml->addChild('cas:authenticationSuccess');
             $childSuccess->addChild('cas:user', $username);
-            if (!empty($pgt)) {
-                $childSuccess->addChild('cas:proxyGrantingTicket', $pgt);
-            }
 
             if (!empty($attrs)) {
                 $childAttrs = $childSuccess->addChild('cas:attributes');
                 foreach ($attrs as $key => $value) {
                     $childAttrs->addChild('cas:'.$key, $value);
-                }
-            }
-
-            if (!empty($proxies)) {
-                $childProxies = $childSuccess->addChild('cas:proxies');
-                foreach ($proxies as $proxy) {
-                    $childProxies->addChild('cas:proxy', $proxy);
                 }
             }
 
@@ -166,12 +145,12 @@ class ValidateController extends Controller
      * @param $code
      * @param $desc
      * @param $format
-     * @return Response|JsonResponse
+     * @return Response
      */
     protected function failureResponse($code, $desc, $format)
     {
         if (strtoupper($format) === 'JSON') {
-            return new JsonResponse(
+            return new Response(
                 [
                     'serviceResponse' => [
                         'authenticationFailure' => [

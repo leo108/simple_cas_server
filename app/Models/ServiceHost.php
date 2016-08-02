@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ServiceHost extends Model
 {
+    public $timestamps = false;
     protected $fillable = ['host', 'service_id'];
 
     public function service()

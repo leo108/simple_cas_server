@@ -1,5 +1,8 @@
 <?php
 
+use App\Services\User;
+use App\Services\Service;
+
 abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
 {
     /**
@@ -21,5 +24,20 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
         $app->make(Illuminate\Contracts\Console\Kernel::class)->bootstrap();
 
         return $app;
+    }
+
+    protected function initDemoUser()
+    {
+        return User::create('demo', 'Demo Name', 'secret', 'demo@demo.com');
+    }
+
+    protected function initService()
+    {
+        return Service::create(
+            'demo',
+            [
+                'demo.com',
+            ]
+        );
     }
 }

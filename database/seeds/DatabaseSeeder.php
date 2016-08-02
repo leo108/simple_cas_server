@@ -11,6 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        // $this->call(UsersTableSeeder::class);
+        \App\Services\User::create('demo', 'Demo User', 'secret', 'demo@demo.com', false);
+        \App\Services\User::create('admin', 'Admin User', 'secret', 'admin@demo.com', true);
     }
 }

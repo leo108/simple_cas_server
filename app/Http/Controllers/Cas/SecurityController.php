@@ -9,15 +9,14 @@
 namespace App\Http\Controllers\Cas;
 
 
+use App\Exceptions\CAS\CasException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use App\Services\Service;
 use App\Http\Controllers\Controller;
 use App\Services\Ticket;
 use App\User;
-use App\Exceptions\CAS\InvalidServiceException;
 
 class SecurityController extends Controller
 {
@@ -25,27 +24,21 @@ class SecurityController extends Controller
 
     protected $username = 'name';
 
-    public function __construct()
-    {
-        //$this->middleware($this->guestMiddleware(), ['except' => 'logoutAction']);
-    }
-
     public function loginPageAction(Request $request)
     {
         $gateway = $request->get('gateway', '');
         $service = $request->get('service', '');
-        $errors = [];
+        $errors  = [];
         if (!empty($service)) {
             //service not found in white list
             if (!Service::isUrlValid($service)) {
-                $errors[] = 'invalid service';
+                $errors[] = (new CasException(CasException::INVALID_SERVICE))->getCasMsg();
             }
         }
 
         $user = \Auth::user();
-
         //user already has sso session
-        if (empty($errors) && $user) {
+        if ($user) {
             //must not be transparent
             if ($request->get('warn') === 'true' && !empty($service)) {
                 $query = $request->query->all();
@@ -54,7 +47,6 @@ class SecurityController extends Controller
 
                 return view('auth.login_warn', ['url' => $url]);
             }
-
 
             return $this->authenticated($request, $user);
         }
@@ -65,26 +57,23 @@ class SecurityController extends Controller
         }
 
         return view('auth.login', ['origin_req' => $request->query->all()])->withErrors(['global' => $errors]);
-
     }
 
     protected function authenticated(Request $request, User $user)
     {
         $serviceUrl = $request->get('service', '');
         if (!empty($serviceUrl)) {
-            $query    = parse_url($serviceUrl, PHP_URL_QUERY);
-            $ticket   = Ticket::applyTicket($user, $serviceUrl);
+            $query = parse_url($serviceUrl, PHP_URL_QUERY);
+            try {
+                $ticket = Ticket::applyTicket($user, $serviceUrl);
+            } catch (CasException $e) {
+                return redirect()->route('home')->withErrors(['global' => $e->getCasMsg()]);
+            }
             $finalUrl = $serviceUrl.($query ? '&' : '?').'ticket='.$ticket->ticket;
-            $resp     = redirect($finalUrl);
-        } else {
-            $resp = redirect()->route('home');
+
+            return redirect($finalUrl);
         }
 
-        return $resp;
-    }
-
-    public function logoutAction()
-    {
-        return new Response('123');
+        return redirect()->route('home');
     }
 }

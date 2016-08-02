@@ -30,6 +30,15 @@ class User
         return Model::where('name', $name)->first();
     }
 
+    /**
+     * @param      $name
+     * @param      $realName
+     * @param      $password
+     * @param      $email
+     * @param bool $isAdmin
+     * @param bool $enabled
+     * @return  \App\User
+     */
     public static function create($name, $realName, $password, $email, $isAdmin = false, $enabled = true)
     {
         if (static::getUserByName($name)) {

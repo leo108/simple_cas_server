@@ -11,9 +11,6 @@ namespace App\Exceptions\CAS;
 class CasException extends \Exception
 {
     const INVALID_REQUEST = 'INVALID_REQUEST';
-    const INVALID_TICKET_SPEC = 'INVALID_TICKET_SPEC';
-    const UNAUTHORIZED_SERVICE_PROXY = 'UNAUTHORIZED_SERVICE_PROXY';
-    const INVALID_PROXY_CALLBACK = 'INVALID_PROXY_CALLBACK';
     const INVALID_TICKET = 'INVALID_TICKET';
     const INVALID_SERVICE = 'INVALID_SERVICE';
     const INTERNAL_ERROR = 'INTERNAL_ERROR';
@@ -36,6 +33,12 @@ class CasException extends \Exception
      */
     public function getCasErrorCode()
     {
+        return $this->casErrorCode;
+    }
+
+    public function getCasMsg()
+    {
+        //todo translate error msg
         return $this->casErrorCode;
     }
 }
