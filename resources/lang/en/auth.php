@@ -24,4 +24,5 @@ return [
     'old_pwd'      => 'Old Password',
     'new_pwd'      => 'New Password',
     'new_pwd2'     => 'Repeat New Password',
+    'need_login'   => 'You need to login first',
 ];

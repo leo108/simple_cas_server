@@ -24,4 +24,5 @@ return [
     'old_pwd'      => '旧密码',
     'new_pwd'      => '新密码',
     'new_pwd2'     => '重复密码',
+    'need_login'   => '请先登录',
 ];
