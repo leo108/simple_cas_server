@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Response\JsonResponse;
 use App\Services\User;
 use Illuminate\Http\Request;
 
@@ -23,12 +24,12 @@ class HomeController extends Controller
         $new  = $request->get('new');
         $user = \Auth::user();
         if (!\Hash::check($old, $user->password)) {
-            return $this->errorJson(trans('message.invalid_old_pwd'));
+            return JsonResponse::error(trans('message.invalid_old_pwd'));
         }
         //todo validate new password
 
         User::resetPassword($user->id, $new);
 
-        return $this->successJson([], trans('message.change_pwd_ok'));
+        return JsonResponse::success([], trans('message.change_pwd_ok'));
     }
 }

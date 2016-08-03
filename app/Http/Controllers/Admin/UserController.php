@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
+use App\Response\JsonResponse;
 use App\Services\User;
 use Illuminate\Http\Request;
 
@@ -49,6 +50,6 @@ class UserController extends Controller
         $admin    = $request->get('admin', false);
         $user     = User::createOrUpdate($name, $realName, $password, $email, $admin, $enabled, $id);
 
-        return $this->successJson($user, trans($id > 0 ? 'admin.user.edit_ok' : 'admin.user.add_ok'));
+        return JsonResponse::success($user, trans($id > 0 ? 'admin.user.edit_ok' : 'admin.user.add_ok'));
     }
 }

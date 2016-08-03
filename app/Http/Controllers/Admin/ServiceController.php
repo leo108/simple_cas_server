@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use App\Http\Controllers\Controller;
+use App\Response\JsonResponse;
 use App\Services\Service;
 use Illuminate\Http\Request;
 
@@ -42,6 +43,6 @@ class ServiceController extends Controller
         $service = Service::createOrUpdate($name, $hosts, $enabled, $id);
         $service->load('hosts');
 
-        return $this->successJson($service, trans($id > 0 ? 'admin.service.edit_ok' : 'admin.service.add_ok'));
+        return JsonResponse::success($service, trans($id > 0 ? 'admin.service.edit_ok' : 'admin.service.add_ok'));
     }
 }
