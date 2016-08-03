@@ -1,16 +1,19 @@
 <?php
 return [
     'system_manage' => 'System Manage',
+    'back_to_front' => 'Back To Front End',
     'menu'          => [
         'dashboard' => 'Dashboard',
         'users'     => 'Users',
         'services'  => 'Services',
     ],
     'dashboard'     => [
-        'view_details' => 'View Details',
-        'user_total'   => 'Users',
-        'user_active'  => 'Active',
-        'user_admin'   => 'Admin',
+        'view_details'    => 'View Details',
+        'user_total'      => 'Users',
+        'service_total'   => 'Service',
+        'service_enabled' => 'Enabled',
+        'user_active'     => 'Active',
+        'user_admin'      => 'Admin',
     ],
     'user'          => [
         'username'    => 'User Name',

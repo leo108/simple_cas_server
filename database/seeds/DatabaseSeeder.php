@@ -13,5 +13,12 @@ class DatabaseSeeder extends Seeder
     {
         \App\Services\User::createOrUpdate('demo', 'Demo User', 'secret', 'demo@demo.com', false);
         \App\Services\User::createOrUpdate('admin', 'Admin User', 'secret', 'admin@demo.com', true);
+        \App\Services\Service::createOrUpdate(
+            'test',
+            [
+                'test.com',
+                'demo.com',
+            ]
+        );
     }
 }

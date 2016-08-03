@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\Service;
 use App\Services\User;
 
 class HomeController extends Controller
@@ -18,7 +19,8 @@ class HomeController extends Controller
         return view(
             'admin.dashboard',
             [
-                'user' => User::dashboard(),
+                'user'    => User::dashboard(),
+                'service' => Service::dashboard(),
             ]
         );
     }

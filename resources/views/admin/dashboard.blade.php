@@ -42,7 +42,31 @@
             </div>
             <!-- /.col-lg-6 -->
             <div class="col-lg-6">
-
+                <div class="panel panel-success">
+                    <div class="panel-heading">
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <i class="fa fa-user fa-5x"></i>
+                            </div>
+                            <div class="col-xs-9 text-right">
+                                <div class="huge">{{ $service['total'] }}</div>
+                                <div>@lang('admin.dashboard.service_total')</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-6">
+                                {{ $service['enabled'] }} @lang('admin.dashboard.service_enabled')
+                            </div>
+                        </div>
+                    </div>
+                    <a href="{{ route('admin_service_list') }}">
+                        <div class="panel-footer">
+                            <span class="pull-left">@lang('admin.dashboard.view_details')</span>
+                            <span class="pull-right"><i class="fa fa-arrow-circle-right"></i></span>
+                            <div class="clearfix"></div>
+                        </div>
+                    </a>
+                </div>
             </div>
             <!-- /.col-lg-6 -->
         </div>
