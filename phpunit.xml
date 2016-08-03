@@ -27,5 +27,10 @@
         <env name="SESSION_DRIVER" value="array"/>
         <env name="QUEUE_DRIVER" value="sync"/>
         <env name="CAS_TICKET_EXPIRE" value="5"/>
+        <env name="DB_HOST" value="127.0.0.1"/>
+        <env name="DB_PORT" value="3306"/>
+        <env name="DB_DATABASE" value="cas"/>
+        <env name="DB_USERNAME" value="travis"/>
+        <env name="DB_PASSWORD" value=""/>
     </php>
 </phpunit>
