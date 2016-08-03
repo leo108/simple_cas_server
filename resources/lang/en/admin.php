@@ -7,7 +7,10 @@ return [
         'services'  => 'Services',
     ],
     'dashboard'     => [
-
+        'view_details' => 'View Details',
+        'user_total'   => 'Users',
+        'user_active'  => 'Active',
+        'user_admin'   => 'Admin',
     ],
     'user'          => [
         'username'    => 'User Name',

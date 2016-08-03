@@ -125,4 +125,13 @@ class User
 
         return $query->orderBy('id', 'desc')->paginate($limit, ['*'], 'page', $page);
     }
+
+    public static function dashboard()
+    {
+        return [
+            'total'  => Model::count(),
+            'active' => Model::where('enabled', true)->count(),
+            'admin'  => Model::where('admin', true)->count(),
+        ];
+    }
 }
