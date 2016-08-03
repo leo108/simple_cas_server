@@ -28,7 +28,7 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
 
     protected function initDemoUser()
     {
-        return User::create('demo', 'Demo Name', 'secret', 'demo@demo.com');
+        return User::createOrUpdate('demo', 'Demo Name', 'secret', 'demo@demo.com');
     }
 
     protected function initService()

@@ -19,8 +19,7 @@
                         </div>
                         <button class="btn btn-primary pull-left" id="btn_change_pwd">@lang('auth.change_pwd')</button>
                         @if(Auth::user()->admin)
-                            <a href="{{ route('admin_home') }}" class="btn-success btn col-md-offset-1">System
-                                Manage</a>
+                            <a href="{{ route('admin_home') }}" class="btn-success btn col-md-offset-1">@lang('admin.system_manage')</a>
                         @endif
                         <button class="btn btn-danger pull-right" id="btn_logout">@lang('auth.logout')</button>
                     </div>

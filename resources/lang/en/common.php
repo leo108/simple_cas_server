@@ -6,4 +6,6 @@ return [
     'cancel'  => 'Cancel',
     'confirm' => 'Confirm',
     'close'   => 'Close',
+    'yes'     => 'Yes',
+    'no'      => 'No',
 ];

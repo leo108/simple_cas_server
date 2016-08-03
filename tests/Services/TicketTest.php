@@ -21,7 +21,7 @@ class TicketTest extends TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->user    = User::create('demo', 'Demo Name', 'secret', 'demo@demo.com');
+        $this->user    = User::createOrUpdate('demo', 'Demo Name', 'secret', 'demo@demo.com');
         $this->service = Service::create(
             'test',
             [

@@ -11,7 +11,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        \App\Services\User::create('demo', 'Demo User', 'secret', 'demo@demo.com', false);
-        \App\Services\User::create('admin', 'Admin User', 'secret', 'admin@demo.com', true);
+        \App\Services\User::createOrUpdate('demo', 'Demo User', 'secret', 'demo@demo.com', false);
+        \App\Services\User::createOrUpdate('admin', 'Admin User', 'secret', 'admin@demo.com', true);
     }
 }
