@@ -22,7 +22,7 @@ class TicketTest extends TestCase
     {
         parent::setUp();
         $this->user    = User::createOrUpdate('demo', 'Demo Name', 'secret', 'demo@demo.com');
-        $this->service = Service::create(
+        $this->service = Service::createOrUpdate(
             'test',
             [
                 'test.com',

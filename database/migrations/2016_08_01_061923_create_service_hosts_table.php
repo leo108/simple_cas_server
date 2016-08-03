@@ -16,7 +16,6 @@ class CreateServiceHostsTable extends Migration
             $table->increments('id');
             $table->string('host')->unique();
             $table->integer('service_id')->unsigned();
-            $table->timestamp('created_at')->nullable();
             $table->foreign('service_id')->references('id')->on('services');
         });
     }

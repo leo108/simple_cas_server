@@ -33,7 +33,7 @@ abstract class TestCase extends Illuminate\Foundation\Testing\TestCase
 
     protected function initService()
     {
-        return Service::create(
+        return Service::createOrUpdate(
             'demo',
             [
                 'demo.com',

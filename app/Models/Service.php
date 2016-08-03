@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
 class Service extends Model
 {
     public $timestamps = false;
-    protected $fillable = ['name'];
+    protected $fillable = ['name', 'enabled', 'created_at'];
 
     public function hosts()
     {

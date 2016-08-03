@@ -17,7 +17,7 @@ class ServiceTest extends TestCase
 
     public function testCreateAndGet()
     {
-        $service = Service::create(
+        $service = Service::createOrUpdate(
             'test',
             [
                 'test.com',
@@ -34,9 +34,32 @@ class ServiceTest extends TestCase
         $this->assertFalse(Service::isUrlValid('http://none.com'));
     }
 
+    public function testEnable()
+    {
+        $service = Service::createOrUpdate(
+            'test',
+            [
+                'test.com',
+                'demo.com',
+            ]
+        );
+        $this->assertTrue(Service::isUrlValid('http://test.com'));
+
+        Service::createOrUpdate(
+            'test',
+            [
+                'test.com',
+                'demo.com',
+            ],
+            false,
+            $service->id
+        );
+        $this->assertFalse(Service::isUrlValid('http://test.com'));
+    }
+
     public function testException1()
     {
-        Service::create(
+        Service::createOrUpdate(
             'test',
             [
                 'test.com',
@@ -44,7 +67,7 @@ class ServiceTest extends TestCase
             ]
         );
         try {
-            Service::create('test', []);
+            Service::createOrUpdate('test', []);
         } catch (\RuntimeException $e) {
             return;
         }
@@ -53,7 +76,7 @@ class ServiceTest extends TestCase
 
     public function testException2()
     {
-        Service::create(
+        Service::createOrUpdate(
             'test',
             [
                 'test.com',
@@ -61,7 +84,7 @@ class ServiceTest extends TestCase
             ]
         );
         try {
-            Service::create('test2', ['test.com']);
+            Service::createOrUpdate('test2', ['test.com']);
         } catch (\RuntimeException $e) {
             return;
         }

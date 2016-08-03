@@ -10,6 +10,7 @@ namespace App\Services;
 
 use App\Models\Service as Model;
 use App\Models\ServiceHost as ServiceHostModel;
+use Carbon\Carbon;
 
 class Service
 {
@@ -35,29 +36,68 @@ class Service
      */
     public static function isUrlValid($url)
     {
-        return self::getServiceByUrl($url) !== null;
+        $service = self::getServiceByUrl($url);
+
+        return $service !== null && $service->enabled;
     }
 
     /**
      * @param $name
      * @param $hostArr
+     * @param $enabled
+     * @param $id
      * @return \App\Models\Service
      */
-    public static function create($name, $hostArr)
+    public static function createOrUpdate($name, $hostArr, $enabled = true, $id = 0)
     {
-        if (Model::where('name', $name)->count() > 0) {
-            throw new \RuntimeException('Service name duplicated'); //todo change exception class
+        \DB::beginTransaction();
+        if ($id == 0) {
+            if (Model::where('name', $name)->count() > 0) {
+                throw new \RuntimeException('Service name duplicated'); //todo change exception class
+            }
+
+            $service = Model::create(
+                [
+                    'name'       => $name,
+                    'enabled'    => boolval($enabled),
+                    'created_at' => (new Carbon())->toDateTimeString(),
+                ]
+            );
+        } else {
+            $service          = Model::find($id);
+            $service->enabled = boolval($enabled);
+            $service->save();
+            ServiceHostModel::where('service_id', $id)->delete();
         }
 
-        $service = Model::create(['name' => $name]);
         foreach ($hostArr as $host) {
+            $host = trim($host);
             if (ServiceHostModel::where('host', $host)->count() > 0) {
                 //todo change exception class
                 throw new \RuntimeException(sprintf('Service host %s is occupied', $host));
             }
             ServiceHostModel::create(['host' => $host, 'service_id' => $service->id]);
         }
+        \DB::commit();
 
         return $service;
+    }
+
+    public static function getList($search, $page, $limit)
+    {
+        /* @var \Illuminate\Database\Query\Builder $query */
+        $like = '%'.$search.'%';
+        if (!empty($search)) {
+            $query = Model::whereHas(
+                'hosts',
+                function ($query) use ($like) {
+                    $query->where('host', 'like', $like);
+                }
+            )->orWhere('name', 'like', $like)->with('hosts');
+        } else {
+            $query = Model::with('hosts');
+        }
+
+        return $query->orderBy('id', 'desc')->paginate($limit, ['*'], 'page', $page);
     }
 }

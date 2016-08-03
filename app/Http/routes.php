@@ -47,5 +47,6 @@ Route::group(
         Route::get('users', ['as' => 'admin_user_list', 'uses' => 'UserController@listAction']);
         Route::post('user', ['as' => 'admin_save_user', 'uses' => 'UserController@saveAction']);
         Route::get('services', ['as' => 'admin_service_list', 'uses' => 'ServiceController@listAction']);
+        Route::post('service', ['as' => 'admin_save_service', 'uses' => 'ServiceController@saveAction']);
     }
 );
