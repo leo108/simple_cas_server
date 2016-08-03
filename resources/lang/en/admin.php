@@ -35,7 +35,6 @@ return [
     'service'       => [
         'add_or_edit'       => 'Add/Edit Service',
         'name'              => 'Service Name',
-        'hostname'          => 'Service Url',
         'hosts'             => 'Service Domain',
         'enabled'           => 'Enabled',
         'created_at'        => 'Created Time',

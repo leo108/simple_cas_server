@@ -13,7 +13,7 @@
             <div class="col-lg-12">
                 <form class="form-inline" role="form" id="search-form">
                     <div class="form-group">
-                        <input name="search" type="text" class="form-control" v-model="search" placeholder="@lang('admin.service.name')/@lang('admin.service.hostname')" />
+                        <input name="search" type="text" class="form-control" v-model="search" placeholder="@lang('admin.service.name')/@lang('admin.service.hosts')" />
                     </div>
                     <div class="form-group">
                         <button class="btn btn-sm btn-primary">@lang('admin.search')</button>

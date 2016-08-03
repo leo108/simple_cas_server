@@ -21,4 +21,7 @@ return [
     'logout'       => '注销',
     'logged_in_as' => '你已登录为 :name',
     'change_pwd'   => '修改密码',
+    'old_pwd'      => '旧密码',
+    'new_pwd'      => '新密码',
+    'new_pwd2'     => '重复密码',
 ];
