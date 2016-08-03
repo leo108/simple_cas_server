@@ -57,6 +57,35 @@ class ServiceTest extends TestCase
         $this->assertFalse(Service::isUrlValid('http://test.com'));
     }
 
+    public function testGetList()
+    {
+        Service::createOrUpdate(
+            'key1',
+            [
+                'key2.com',
+                'key3.com',
+            ]
+        );
+        Service::createOrUpdate(
+            'key2',
+            [
+                'key4.com',
+                'key5.net',
+            ]
+        );
+        $this->assertCount(2, Service::getList('', 1, 10));
+        $this->assertCount(2, Service::getList('key2', 1, 10));
+        //only match host
+        $list = Service::getList('key3', 1, 10);
+        $this->assertCount(1, $list);
+        $this->assertEquals($list[0]['name'], 'key1');
+
+        //only match name
+        $list = Service::getList('key1', 1, 10);
+        $this->assertCount(1, $list);
+        $this->assertEquals($list[0]['name'], 'key1');
+    }
+
     public function testException1()
     {
         Service::createOrUpdate(

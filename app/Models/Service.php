@@ -15,6 +15,9 @@ class Service extends Model
 {
     public $timestamps = false;
     protected $fillable = ['name', 'enabled', 'created_at'];
+    protected $casts = [
+        'enabled' => 'boolean',
+    ];
 
     public function hosts()
     {
