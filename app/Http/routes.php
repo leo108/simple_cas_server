@@ -11,7 +11,15 @@
 |
 */
 
-Route::get('/', ['as' => 'home', 'uses' => 'HomeController@index']);
+Route::group(
+    [
+        'middleware' => 'auth',
+    ],
+    function () {
+        Route::get('/', ['as' => 'home', 'uses' => 'HomeController@indexAction']);
+        Route::post('changePwd', ['as' => 'change_pwd', 'uses' => 'HomeController@changePwdAction']);
+    }
+);
 
 Route::group(
     [

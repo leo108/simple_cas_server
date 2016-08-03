@@ -5,4 +5,5 @@ return [
     'abort'   => 'Abort',
     'cancel'  => 'Cancel',
     'confirm' => 'Confirm',
+    'close'   => 'Close',
 ];

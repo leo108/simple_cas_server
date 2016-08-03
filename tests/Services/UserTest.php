@@ -23,7 +23,7 @@ class UserTest extends TestCase
         $this->assertEquals('demo@demo.com', $user->email);
         $this->assertTrue($user->enabled);
         $this->assertFalse($user->admin);
-        $this->assertTrue($this->app->make('hash')->check('secret', $user->password));
+        $this->assertTrue(Hash::check('secret', $user->password));
         $this->assertEquals($user->id, User::getUserById($user->id)->id);
         $this->assertEquals($user->id, User::getUserByName($user->name)->id);
 
@@ -36,5 +36,14 @@ class UserTest extends TestCase
             return;
         }
         $this->fail('An expected exception has not been raised.');
+    }
+
+    public function testResetPassword()
+    {
+        $user = User::create('demo', 'Demo Name', 'secret', 'demo@demo.com');
+        $this->assertTrue(Hash::check('secret', $user->password));
+
+        $new = User::resetPassword($user->id, 'new pwd');
+        $this->assertTrue(Hash::check('new pwd', $new->password));
     }
 }

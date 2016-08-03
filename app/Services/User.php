@@ -9,6 +9,7 @@
 namespace App\Services;
 
 use App\User as Model;
+use Illuminate\Support\Str;
 
 class User
 {
@@ -31,13 +32,13 @@ class User
     }
 
     /**
-     * @param      $name
-     * @param      $realName
-     * @param      $password
-     * @param      $email
-     * @param bool $isAdmin
-     * @param bool $enabled
-     * @return  \App\User
+     * @param string $name
+     * @param string $realName
+     * @param string $password
+     * @param string $email
+     * @param bool   $isAdmin
+     * @param bool   $enabled
+     * @return \App\User
      */
     public static function create($name, $realName, $password, $email, $isAdmin = false, $enabled = true)
     {
@@ -55,5 +56,20 @@ class User
                 'admin'     => boolval($isAdmin),
             ]
         );
+    }
+
+    /**
+     * @param int    $id
+     * @param string $pwd
+     * @return \App\User
+     */
+    public static function resetPassword($id, $pwd)
+    {
+        $user                 = Model::find($id);
+        $user->password       = bcrypt($pwd);
+        $user->remember_token = Str::random(60);
+        $user->save();
+
+        return $user;
     }
 }
