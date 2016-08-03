@@ -13,7 +13,8 @@
             <div class="col-lg-12">
                 <form class="form-inline" role="form" id="search-form">
                     <div class="form-group">
-                        <input name="search" type="text" class="form-control" v-model="search" placeholder="@lang('admin.service.name')/@lang('admin.service.hosts')" />
+                        <input name="search" type="text" class="form-control" v-model="search"
+                               placeholder="@lang('admin.service.name')/@lang('admin.service.hosts')"/>
                     </div>
                     <div class="form-group">
                         <button class="btn btn-sm btn-primary">@lang('admin.search')</button>
@@ -31,7 +32,8 @@
                             <th>@lang('admin.service.enabled')</th>
                             <th>@lang('admin.service.created_at')</th>
                             <th>
-                                <button class="btn btn-xs btn-primary" id="add-btn">{{ trans('admin.service.add') }}</button>
+                                <button class="btn btn-xs btn-primary"
+                                        id="add-btn">{{ trans('admin.service.add') }}</button>
                             </th>
                         </tr>
                         </thead>
@@ -80,7 +82,8 @@
                         <div class="form-group">
                             <label class="col-sm-4 control-label">@lang('admin.service.hosts')</label>
                             <div class="col-sm-6">
-                                <textarea class="form-control" name="hosts" cols="30" rows="10" v-model="service.hosts" placeholder="@lang('admin.service.hosts_placeholder')"></textarea>
+                                <textarea class="form-control" name="hosts" cols="30" rows="10" v-model="service.hosts"
+                                          placeholder="@lang('admin.service.hosts_placeholder')"></textarea>
                             </div>
                         </div>
                         <div class="form-group">
@@ -126,7 +129,7 @@
                     },
                     displayHosts: function (hostArr) {
                         var arr = [];
-                        for(var x in hostArr){
+                        for (var x in hostArr) {
                             arr.push(hostArr[x].host);
                         }
                         return arr.join("\n");
@@ -160,7 +163,16 @@
                             if (ret.code != 0) {
                                 return;
                             }
-                            $serviceList.services.unshift(ret.data);
+                            if ($edit.isEdit) {
+                                for (var x in $serviceList.services) {
+                                    if ($serviceList.services[x].id == ret.data.id) {
+                                        $serviceList.services.splice(x, 1, ret.data);
+                                        break;
+                                    }
+                                }
+                            } else {
+                                $serviceList.services.unshift(ret.data);
+                            }
                             $('#edit-dialog').modal('hide');
                         }, 'json');
                     }
