@@ -39,3 +39,7 @@ A simple PHP implement of CAS server
 * event hook
 * gui installation
 * tar ball release
+
+## License
+
+[MIT](http://opensource.org/licenses/MIT)
