@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Response\JsonResponse;
 use Closure;
 
 class Admin
@@ -20,7 +21,7 @@ class Admin
         }
 
         if ($request->ajax() || $request->wantsJson()) {
-            return response('Unauthorized.', 401);
+            return JsonResponse::error(trans('auth.need_login'));
         }
 
         return redirect()->route('cas_login_page');

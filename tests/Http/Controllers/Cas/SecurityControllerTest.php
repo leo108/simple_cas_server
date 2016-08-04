@@ -37,6 +37,14 @@ class SecurityControllerTest extends TestCase
         $this->assertNotContains($user->name, $this->route('GET', 'cas_logout', [], [], $cookies)->getContent());
     }
 
+    public function testDisabledUser()
+    {
+        $user          = $this->initDemoUser();
+        $user->enabled = false;
+        $user->save();
+        $this->_login($user->name, 'secret')->see(trans('auth.failed'));
+    }
+
     public function testLoginWithRemember()
     {
         $user = $this->initDemoUser();

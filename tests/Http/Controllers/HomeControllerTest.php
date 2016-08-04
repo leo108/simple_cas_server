@@ -20,4 +20,13 @@ class HomeControllerTest extends TestCase
         $this->actingAs($user)->route('POST', 'change_pwd', [], ['old' => 'secret', 'new' => 'new pwd']);
         $this->seeJson(['code' => 0]);
     }
+
+    public function testDisabledUser()
+    {
+        $user          = $this->initDemoUser();
+        $user->enabled = false;
+        $user->save();
+        $this->actingAs($user)->route('GET', 'home');
+        $this->assertRedirectedToRoute('cas_login_page');
+    }
 }
