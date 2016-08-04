@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\Cas;
 
 
+use App\Events\CasUserLoginEvent;
 use App\Exceptions\CAS\CasException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
@@ -60,19 +61,6 @@ class SecurityController extends Controller
 
     protected function authenticated(Request $request, User $user)
     {
-        $serviceUrl = $request->get('service', '');
-        if (!empty($serviceUrl)) {
-            $query = parse_url($serviceUrl, PHP_URL_QUERY);
-            try {
-                $ticket = Ticket::applyTicket($user, $serviceUrl);
-            } catch (CasException $e) {
-                return redirect()->route('home')->withErrors(['global' => $e->getCasMsg()]);
-            }
-            $finalUrl = $serviceUrl.($query ? '&' : '?').'ticket='.$ticket->ticket;
-
-            return redirect($finalUrl);
-        }
-
-        return redirect()->route('home');
+        return event(new CasUserLoginEvent($request, $user), [], true);
     }
 }

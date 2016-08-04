@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cf45718277b71f28f52a9b8d23ead31f",
-    "content-hash": "d67bc4a4bbf11a07f25eadd810913b6a",
+    "hash": "6dacd1729d842a80cb53748b77d68d03",
+    "content-hash": "ac8152324191e6d4d50cd42da64250bf",
     "packages": [
         {
             "name": "arvenil/ninja-mutex",
@@ -1017,16 +1017,16 @@
         },
         {
             "name": "league/flysystem",
-            "version": "1.0.25",
+            "version": "1.0.26",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/flysystem.git",
-                "reference": "a76afa4035931be0c78ca8efc6abf3902362f437"
+                "reference": "fb3b30dca320b36931ea878fea17ebe136fba1b0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/flysystem/zipball/a76afa4035931be0c78ca8efc6abf3902362f437",
-                "reference": "a76afa4035931be0c78ca8efc6abf3902362f437",
+                "url": "https://packagist.phpcomposer.com/files/thephpleague/flysystem/fb3b30dca320b36931ea878fea17ebe136fba1b0.zip",
+                "reference": "fb3b30dca320b36931ea878fea17ebe136fba1b0",
                 "shasum": ""
             },
             "require": {
@@ -1096,7 +1096,32 @@
                 "sftp",
                 "storage"
             ],
-            "time": "2016-07-18 12:22:57"
+            "time": "2016-08-03 09:49:11"
+        },
+        {
+            "name": "leo108/simple_cas_wechat",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "/home/vagrant/online/website/simple_cas_wechat",
+                "reference": "52f915dae1cafa67a100c3e595d8d4e95e0f74d4"
+            },
+            "require": {
+                "laravel/framework": "^5.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "SimpleCas\\": "src/"
+                }
+            },
+            "authors": [
+                {
+                    "name": "leo108",
+                    "email": "leo108@qq.com"
+                }
+            ],
+            "time": "2016-08-04 09:59:07"
         },
         {
             "name": "monolog/monolog",
@@ -3789,7 +3814,9 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {
+        "leo108/simple_cas_wechat": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
