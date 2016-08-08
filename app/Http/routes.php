@@ -21,6 +21,29 @@ Route::group(
     }
 );
 
+if (config('cas.allow_reset_pwd')) {
+    Route::group(
+        [
+            'middleware' => 'guest',
+        ],
+        function () {
+            Route::get(
+                'password/email',
+                ['as' => 'request_pwd_reset_email_page', 'uses' => 'PasswordController@getEmail']
+            );
+            Route::post(
+                'password/email',
+                ['as' => 'send_pwd_reset_email', 'uses' => 'PasswordController@sendResetLinkEmail']
+            );
+            Route::get(
+                'password/reset/{token?}',
+                ['as' => 'reset_pwd_page', 'uses' => 'PasswordController@showResetForm']
+            );
+            Route::post('password/reset', ['as' => 'do_reset_pwd', 'uses' => 'PasswordController@reset']);
+        }
+    );
+}
+
 Route::group(
     [
         'prefix'    => 'cas',

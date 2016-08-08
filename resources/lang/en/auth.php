@@ -23,6 +23,6 @@ return [
     'change_pwd'   => 'Change Password',
     'old_pwd'      => 'Old Password',
     'new_pwd'      => 'New Password',
-    'new_pwd2'     => 'Repeat New Password',
+    'new_pwd2'     => 'Confirm New Password',
     'need_login'   => 'You need to login first',
 ];

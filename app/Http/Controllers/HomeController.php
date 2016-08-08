@@ -20,13 +20,15 @@ class HomeController extends Controller
 
     public function changePwdAction(Request $request)
     {
+        $rule = User::getPasswordRule(true);
+        $this->validate($request, ['new' => $rule], [], ['new' => trans('auth.new_pwd')]);
+
         $old  = $request->get('old');
         $new  = $request->get('new');
         $user = \Auth::user();
         if (!\Hash::check($old, $user->password)) {
             return JsonResponse::error(trans('message.invalid_old_pwd'));
         }
-        //todo validate new password
 
         User::resetPassword($user->id, $new);
 

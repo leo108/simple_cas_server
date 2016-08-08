@@ -7,8 +7,10 @@ use Exception;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use App\Response\JsonResponse as AppJsonResponse;
 
 class Handler extends ExceptionHandler
 {
@@ -47,6 +49,15 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $e)
     {
+        //rewrite json response
+        if (($request->ajax() && !$request->pjax()) || $request->wantsJson()) {
+            if ($e instanceof ValidationException) {
+                return AppJsonResponse::error(join("\n", $e->validator->errors()->all()), -1);
+            }
+
+            return AppJsonResponse::error($e->getMessage(), $e->getCode());
+        }
+
         return parent::render($request, $e);
     }
 }

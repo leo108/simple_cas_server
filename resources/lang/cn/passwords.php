@@ -14,13 +14,13 @@ return [
     */
 
     'password'      => 'Passwords must be at least six characters and match the confirmation.',
-    'reset'         => 'Your password has been reset!',
-    'sent'          => 'We have e-mailed your password reset link!',
-    'token'         => 'This password reset token is invalid.',
-    'user'          => "We can't find a user with that e-mail address.",
-    'forget_pwd'    => 'Forget Password',
-    'reset_pwd'     => 'Reset Password',
-    'email'         => 'Email',
-    'email_subject' => 'Your Password Reset Link',
-    'email_content' => 'Click here to reset your password:',
+    'reset'         => '密码修改成功',
+    'sent'          => '密码重置邮件已经发送到你的邮箱',
+    'token'         => '重置链接无效',
+    'user'          => "该邮箱尚未注册",
+    'forget_pwd'    => '忘记密码',
+    'reset_pwd'     => '重置密码',
+    'email'         => '邮箱地址',
+    'email_subject' => '密码重置链接',
+    'email_content' => '点击链接重置密码',
 ];

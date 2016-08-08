@@ -110,7 +110,7 @@
                             <label class="col-sm-4 control-label">@lang('admin.user.email')</label>
                             <div class="col-sm-6">
                                 <input type="text" class="form-control" v-model="user.email" name="email"
-                                       placeholder="@lang('admin.user.email')">
+                                       placeholder="@lang('admin.user.email')" :disabled="isEdit">
                             </div>
                         </div>
                         <div class="form-group">
@@ -215,7 +215,7 @@
                 $edit.isEdit = false;
                 $edit.user.id = 0;
                 $edit.user.name = '';
-                $edit.user.realName = '';
+                $edit.user.real_name = '';
                 $edit.user.email = '';
                 $edit.user.password = '';
                 $edit.user.enabled = true;

@@ -8,6 +8,7 @@
 
 namespace App\Services;
 
+use App\Exceptions\UserException;
 use App\Models\Service as Model;
 use App\Models\ServiceHost as ServiceHostModel;
 use Carbon\Carbon;
@@ -53,7 +54,7 @@ class Service
         \DB::beginTransaction();
         if ($id == 0) {
             if (Model::where('name', $name)->count() > 0) {
-                throw new \RuntimeException('Service name duplicated'); //todo change exception class
+                throw new UserException(trans('message.service.name_duplicated'));
             }
 
             $service = Model::create(
@@ -73,8 +74,7 @@ class Service
         foreach ($hostArr as $host) {
             $host = trim($host);
             if (ServiceHostModel::where('host', $host)->count() > 0) {
-                //todo change exception class
-                throw new \RuntimeException(sprintf('Service host %s is occupied', $host));
+                throw new UserException(trans('message.service.host_occupied', ['host' => $host]));
             }
             ServiceHostModel::create(['host' => $host, 'service_id' => $service->id]);
         }

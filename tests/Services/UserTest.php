@@ -26,6 +26,7 @@ class UserTest extends TestCase
         $this->assertTrue(Hash::check('secret', $user->password));
         $this->assertEquals($user->id, User::getUserById($user->id)->id);
         $this->assertEquals($user->id, User::getUserByName($user->name)->id);
+        $this->assertEquals($user->id, User::getUserByEmail($user->email)->id);
 
         //test update
         $new = User::createOrUpdate('new name', 'New Real Name', 'new pwd', 'new@demo.com', true, false, $user->id);

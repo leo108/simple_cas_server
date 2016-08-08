@@ -35,6 +35,11 @@
                                     <label>
                                         <input name="remember" type="checkbox" value="1">@lang('auth.remember_me')
                                     </label>
+                                    @if (config('cas.allow_reset_pwd'))
+                                    <div class="pull-right">
+                                        <a href="{{ route('request_pwd_reset_email_page') }}">@lang('passwords.forget_pwd')</a>
+                                    </div>
+                                    @endif
                                 </div>
                                 <!-- Change this to a button or input when using this as a form -->
                                 <button type="submit" class="btn btn-lg btn-success btn-block">@lang('common.submit')</button>

@@ -8,14 +8,16 @@
 
 namespace App\Services;
 
+use App\Exceptions\UserException;
 use App\User as Model;
+use App\Utils\SimpleValidator;
 use Illuminate\Support\Str;
 
 class User
 {
     /**
      * @param $id
-     * @return \App\User
+     * @return \App\User|null
      */
     public static function getUserById($id)
     {
@@ -24,11 +26,20 @@ class User
 
     /**
      * @param $name
-     * @return \App\User
+     * @return \App\User|null
      */
     public static function getUserByName($name)
     {
         return Model::where('name', $name)->first();
+    }
+
+    /**
+     * @param $email
+     * @return \App\User|null
+     */
+    public static function getUserByEmail($email)
+    {
+        return Model::where('email', $email)->first();
     }
 
     /**
@@ -50,24 +61,64 @@ class User
         $enabled = true,
         $id = 0
     ) {
-        //todo validate
         $data = [
             'real_name' => $realName,
             'email'     => $email,
             'enabled'   => boolval($enabled),
             'admin'     => boolval($isAdmin),
         ];
+
+        SimpleValidator::validate(
+            $data,
+            [
+                'real_name' => 'required',
+                'email'     => 'required|email',
+            ],
+            [
+                'real_name' => trans('admin.user.real_name'),
+                'email'     => trans('admin.user.email'),
+            ]
+        );
+
         if ($id <= 0) {
             if (static::getUserByName($name)) {
-                throw new \RuntimeException('Username duplicated'); //todo change exception class
+                throw new UserException(trans('message.user.name_duplicated'));
             }
+
+            if (static::getUserByEmail($email)) {
+                throw new UserException(trans('message.user.email_duplicated'));
+            }
+
             $data['name']     = $name;
+            $data['password'] = $password;
+
+            SimpleValidator::validate(
+                $data,
+                [
+                    'name'     => 'required',
+                    'password' => self::getPasswordRule(true),
+                ],
+                [
+                    'name'     => trans('admin.user.username'),
+                    'password' => trans('admin.user.password'),
+                ]
+            );
             $data['password'] = bcrypt($password);
 
             return Model::create($data);
         }
 
         if (!empty($password)) {
+            $data['password'] = $password;
+            SimpleValidator::validate(
+                $data,
+                [
+                    'password' => self::getPasswordRule(true),
+                ],
+                [
+                    'password' => trans('admin.user.password'),
+                ]
+            );
             $data['password'] = bcrypt($password);
         }
 
@@ -83,7 +134,10 @@ class User
      */
     public static function resetPassword($id, $pwd)
     {
-        $user                 = Model::find($id);
+        $user = Model::find($id);
+        if (!$user) {
+            throw new UserException(trans('messages.user.not_exists'));
+        }
         $user->password       = bcrypt($pwd);
         $user->remember_token = Str::random(60);
         $user->save();
@@ -133,5 +187,18 @@ class User
             'active' => Model::where('enabled', true)->count(),
             'admin'  => Model::where('admin', true)->count(),
         ];
+    }
+
+    public static function getPasswordRule($returnStr = true)
+    {
+        $rule = [
+            'required',
+            'min:6',
+        ];
+        if ($returnStr) {
+            return join('|', $rule);
+        }
+
+        return $rule;
     }
 }
