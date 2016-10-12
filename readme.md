@@ -4,6 +4,8 @@
 
 A simple PHP implement of CAS server
 
+This project is deprecated, please refer to [laravel_cas_server](https://github.com/leo108/laravel_cas_server) and [php_cas_server](https://github.com/leo108/php_cas_server)
+
 ## Features
 
 * [CAS protocol](https://apereo.github.io/cas/4.2.x/protocol/CAS-Protocol-Specification.html) v1/v2/v3 without proxy
